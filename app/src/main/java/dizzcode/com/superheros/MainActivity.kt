@@ -11,19 +11,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import dizzcode.com.superheros.ui.theme.SuperherosTheme
+import dizzcode.com.superheros.ui.theme.SuperheroesTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            SuperherosTheme {
+            SuperheroesTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    SuperheroesApp()
                 }
             }
         }
@@ -31,17 +28,14 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun SuperheroesApp(modifier: Modifier = Modifier) {
+
 }
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
-    SuperherosTheme {
-        Greeting("Android")
+fun SuperheroesAppPreview() {
+    SuperheroesTheme {
+        SuperheroesApp()
     }
 }
