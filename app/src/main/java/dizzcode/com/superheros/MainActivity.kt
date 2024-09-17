@@ -1,5 +1,6 @@
 package dizzcode.com.superheros
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,6 +22,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -43,6 +45,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -105,6 +108,7 @@ fun AppTopAppBar(modifier: Modifier = Modifier){
                 Image(
                     painter = painterResource(id = R.drawable.ic_batman_logo),
                     contentDescription = null,
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
                     modifier = Modifier
                         .size(dimensionResource(id = R.dimen.image_size_small))
                         .padding(dimensionResource(id = R.dimen.padding_small))
@@ -116,6 +120,7 @@ fun AppTopAppBar(modifier: Modifier = Modifier){
                 Image(
                     painter = painterResource(id = R.drawable.ic_batman_logo),
                     contentDescription = null,
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
                     modifier = Modifier
                         .size(dimensionResource(id = R.dimen.image_size_small))
                         .padding(dimensionResource(id = R.dimen.padding_small))
@@ -152,33 +157,32 @@ fun HeroItem(
     ElevatedCard(
         modifier = modifier
             .clip(MaterialTheme.shapes.medium)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .animateContentSize(
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioNoBouncy,
+                    stiffness = Spring.StiffnessMedium
+                )
+            ),
+        colors = CardDefaults.cardColors(color),
         onClick = { clicked = !clicked },
         elevation = CardDefaults.cardElevation(
             dimensionResource(id = R.dimen.card_elevation)
         ),
     ) {
-        Column (
+
+        Row(
             modifier = Modifier
-                .animateContentSize(
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioNoBouncy,
-                        stiffness = Spring.StiffnessMedium
-                    )
-                )
-                .background(color = color)
-        ){
+                .fillMaxWidth()
+                .padding(dimensionResource(id = R.dimen.padding_medium))
+                .sizeIn(minHeight = 72.dp)
+
+        ) {
 
             Row(
                 modifier = modifier
-                    .fillMaxWidth()
-                    .padding(
-                        top = dimensionResource(id = R.dimen.padding_medium),
-                        bottom = dimensionResource(id = R.dimen.padding_medium),
-                        start = dimensionResource(id = R.dimen.padding_medium),
-                        end = dimensionResource(id = R.dimen.padding_medium)
-                    )
-                    .height(72.dp)
+
+
             ) {
 
                 //Spacer(modifier = Modifier.weight(0.5f))
@@ -190,9 +194,11 @@ fun HeroItem(
 
                 )
 
-                HeroIcon(heroIcon = hero.imageRes,
+                HeroIcon(
+                    heroIcon = hero.imageRes,
                     modifier = Modifier
-                        .weight(1f))
+                        .weight(1f)
+                )
             }
         }
     }
@@ -246,9 +252,8 @@ fun HeroIcon(
     )
 }
 
-@Preview(
-    showBackground = true
-)
+@Preview("Light Theme")
+@Preview("Dark Theme", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun HeroItemPreview() {
     val hero = HeroesRepository.heroes[0]
@@ -258,20 +263,13 @@ fun HeroItemPreview() {
     }
 }
 
-//@Preview(
-//    showBackground = true,
-//    showSystemUi = true
-//)
-//@Composable
-//fun SuperheroesAppDarkThemePreview() {
-//    SuperheroesTheme( darkTheme = true){
-//        SuperheroesApp()
-//    }
-//}
 
-@Preview(
+@Preview(name = "Light Theme",
     showBackground = true,
     showSystemUi = true
+)
+@Preview(name = "Dark Theme",
+    uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
 fun SuperheroesAppPreview() {
